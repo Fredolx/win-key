@@ -25,7 +25,7 @@ void UpdateTrayIcon() {
     nid.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(isOn ? IDI_ICON_ON : IDI_ICON_OFF));
     Shell_NotifyIcon(NIM_MODIFY, &nid);
     ModifyMenu(hMenu, ID_TRAY_TOGGLE, MF_BYCOMMAND | MF_STRING,
-               ID_TRAY_TOGGLE, isOn ? L"Toggle off" : L"Toggle on");
+               ID_TRAY_TOGGLE, isOn ? L"Enable Win Key" : L"Disable Win Key");
 }
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
@@ -86,7 +86,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int) {
     nid.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON_OFF));
     Shell_NotifyIcon(NIM_ADD, &nid);
     hMenu = CreatePopupMenu();
-    AppendMenu(hMenu, MF_STRING, ID_TRAY_TOGGLE, L"Toggle on");
+    AppendMenu(hMenu, MF_STRING, ID_TRAY_TOGGLE, L"Disable Win Key");
     AppendMenu(hMenu, MF_STRING, ID_TRAY_QUIT, L"Quit");
     MSG msg;
     while (GetMessage(&msg, NULL, 0, 0)) {
