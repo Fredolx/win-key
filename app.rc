@@ -1,2 +1,3 @@
+#include "resource.h"
 IDI_ICON_ON ICON "icons/ON.ico"
 IDI_ICON_OFF ICON "icons/OFF.ico"

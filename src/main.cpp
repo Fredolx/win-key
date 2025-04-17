@@ -12,9 +12,7 @@ bool isOn = false;
 
 void UpdateTrayIcon() {
     nid.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(isOn ? IDI_ICON_ON : IDI_ICON_OFF));
-    wcscpy_s(nid.szTip, isOn ? L"State: ON" : L"State: OFF");
     Shell_NotifyIcon(NIM_MODIFY, &nid);
-
     ModifyMenu(hMenu, ID_TRAY_TOGGLE, MF_BYCOMMAND | MF_STRING,
                ID_TRAY_TOGGLE, isOn ? L"Toggle off" : L"Toggle on");
 }
@@ -56,7 +54,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int) {
     hInst = hInstance;
-
     WNDCLASS wc = {};
     wc.lpfnWndProc = WndProc;
     wc.hInstance = hInstance;
