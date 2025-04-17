@@ -9,6 +9,17 @@ HINSTANCE hInst;
 NOTIFYICONDATA nid = {};
 HMENU hMenu;
 bool isOn = false;
+HHOOK keyboardHook;
+
+LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
+    if (nCode == HC_ACTION) {
+        KBDLLHOOKSTRUCT* pKbd = (KBDLLHOOKSTRUCT*)lParam;
+        if (pKbd->vkCode == VK_LWIN) {
+            return 1; 
+        }
+    }
+    return CallNextHookEx(NULL, nCode, wParam, lParam);
+}
 
 void UpdateTrayIcon() {
     nid.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(isOn ? IDI_ICON_ON : IDI_ICON_OFF));
@@ -32,6 +43,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         switch (LOWORD(wParam)) {
         case ID_TRAY_TOGGLE:
             isOn = !isOn;
+            if (isOn) {
+                keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, NULL, 0);
+            }
+            else {
+                UnhookWindowsHookEx(keyboardHook);
+            }
             UpdateTrayIcon();
             break;
         case ID_TRAY_QUIT:
@@ -59,27 +76,23 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int) {
     wc.hInstance = hInstance;
     wc.lpszClassName = L"TrayIconApp";
     RegisterClass(&wc);
-
     HWND hwnd = CreateWindow(wc.lpszClassName, L"", 0,
                              0, 0, 0, 0, NULL, NULL, hInstance, NULL);
-
     nid.cbSize = sizeof(nid);
     nid.hWnd = hwnd;
     nid.uID = 1;
-    nid.uFlags = NIF_MESSAGE | NIF_ICON | NIF_TIP;
+    nid.uFlags = NIF_MESSAGE | NIF_ICON;
     nid.uCallbackMessage = WM_TRAYICON;
-    nid.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON_ON));
+    nid.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON_OFF));
     Shell_NotifyIcon(NIM_ADD, &nid);
-
     hMenu = CreatePopupMenu();
     AppendMenu(hMenu, MF_STRING, ID_TRAY_TOGGLE, L"Toggle on");
     AppendMenu(hMenu, MF_STRING, ID_TRAY_QUIT, L"Quit");
-
     MSG msg;
     while (GetMessage(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
-
+    UnhookWindowsHookEx(keyboardHook);
     return 0;
 }
