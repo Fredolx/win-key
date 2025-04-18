@@ -69,7 +69,18 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     return 0;
 }
 
+bool InstanceAlreadyRunning() {
+    HANDLE hMutex = CreateMutex(NULL, TRUE, L"dev.fredol.winkey");
+    if (GetLastError() == ERROR_ALREADY_EXISTS) {
+        return true;
+    }
+    else return false;
+}
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int) {
+    if (InstanceAlreadyRunning()) {
+        return 1;
+    }
     hInst = hInstance;
     WNDCLASS wc = {};
     wc.lpfnWndProc = WndProc;
@@ -96,3 +107,5 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int) {
     UnhookWindowsHookEx(keyboardHook);
     return 0;
 }
+
+
