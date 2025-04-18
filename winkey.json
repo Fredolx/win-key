@@ -9,6 +9,12 @@
             "hash": "0E113E0131693103E61CA1FD0C83A94DB4DE7D1AA333963F712FD9C6184C0BBF"
         }
     },
+    "shortcuts": [
+        [
+            "WinKey.exe",
+            "WinKey"
+        ]
+    ],
     "bin": "winkey.exe",
     "checkver": {
         "github": "https://github.com/fredolx/winkey"
