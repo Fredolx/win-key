@@ -1,0 +1,31 @@
+name: Build and Upload
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download mpv
+      - uses: TheMrMilchmann/setup-msvc-dev@v3
+        with:
+          arch: x64
+      - name: build
+        run: |
+          mkdir build
+          cd build
+          cmake .. -G "Visual Studio 17 2022" -A x64
+          cmake --build . --config Release
+      - name: Upload MSI
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: winkey
+          path: build/Release/*.exe
+          retention-days: 60
