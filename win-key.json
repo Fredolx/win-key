@@ -6,7 +6,7 @@
     "architecture": {
         "64bit": {
             "url": "https://github.com/Fredolx/win-key/releases/download/v1.0/WinKey.exe",
-            "hash": "84CC2879CF337AECCC2CCCCC9709815437E8ED8C5E876B8475CABBF0B78DD78BADA33204A6D5BDEDEE46100BC990C5BA5DE945E8FA967FAAE3200E080CB91D9E"
+            "hash": "0E113E0131693103E61CA1FD0C83A94DB4DE7D1AA333963F712FD9C6184C0BBF"
         }
     },
     "bin": "winkey.exe",
